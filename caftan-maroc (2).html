@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fano Kaftan — Salé · Caftans Marocains d'Exception</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tajawal:wght@300;400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --or:#C9A84C;--or2:#E8C96A;--or3:#F5E4A0;
+  --bordeaux:#7A1E3A;--bordeaux2:#9B2548;
+  --charbon:#0E0E0E;--charbon2:#1A1A1A;--charbon3:#242424;
+  --ivoire:#FAF7F2;--blanc:#FFFDF9;
+  --gris:#7A7068;--gris-light:#E8E3DC;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease-back:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-sharp:cubic-bezier(0.77,0,0.175,1);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Lato',sans-serif;background:var(--charbon);color:var(--blanc);overflow-x:hidden}
+
+/* ═══════════════════════════ CURSOR ═══════════════════════════ */
+.cursor{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--or);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s var(--ease-back),height 0.3s var(--ease-back),opacity 0.3s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(201,168,76,0.5);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.18s var(--ease),width 0.4s var(--ease-back),height 0.4s var(--ease-back),border-color 0.3s}
+body:hover .cursor{opacity:1}
+
+/* ═══════════════════════════ NAV ═══════════════════════════ */
+nav{
+  position:fixed;top:0;width:100%;z-index:500;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.4rem 6%;
+  transition:padding 0.5s var(--ease),background 0.6s,border-color 0.6s;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(14,14,14,0.92);
+  backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom-color:rgba(201,168,76,0.2);
+  padding:0.9rem 6%;
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blanc);letter-spacing:0.04em;cursor:pointer}
+.logo span{color:var(--or)}
+.logo sub{font-size:0.55rem;letter-spacing:0.25em;color:var(--gris);vertical-align:bottom;text-transform:uppercase;margin-left:6px;font-family:'Lato',sans-serif}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  text-decoration:none;color:rgba(255,255,255,0.65);
+  font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
+  position:relative;transition:color 0.3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:50%;right:50%;
+  height:1px;background:var(--or);
+  transition:left 0.35s var(--ease),right 0.35s var(--ease);
+}
+.nav-links a:hover{color:var(--or)}
+.nav-links a:hover::after{left:0;right:0}
+.nav-right{display:flex;align-items:center;gap:1.2rem}
+.nav-mesure{
+  border:1px solid rgba(201,168,76,0.5);color:var(--or);
+  background:transparent;padding:0.55rem 1.2rem;font-family:'Lato',sans-serif;
+  font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.3s,color 0.3s,box-shadow 0.3s,transform 0.25s var(--ease-back);
+}
+.nav-mesure:hover{background:var(--or);color:var(--charbon);box-shadow:0 0 25px rgba(201,168,76,0.35);transform:translateY(-2px)}
+
+/* ═══════════════════════════ HERO ═══════════════════════════ */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  display:flex;align-items:center;
+  background:var(--charbon);
+}
+
+/* Fond zellige SVG animé futuriste */
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 70% at 65% 50%, rgba(122,30,58,0.18) 0%, transparent 70%),
+             radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.06) 0%, transparent 60%);
+}
+.zellige-canvas{position:absolute;inset:0;opacity:0.07}
+.zellige-canvas svg{width:100%;height:100%}
+
+/* Lignes de scan futuristes */
+.scan-lines{
+  position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.012) 2px,rgba(255,255,255,0.012) 4px);
+}
+
+/* Particules dorées */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:var(--or);opacity:0;
+  animation:float-particle var(--dur,8s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes float-particle{
+  0%{opacity:0;transform:translateY(100vh) translateX(0)}
+  10%{opacity:0.6}
+  90%{opacity:0.3}
+  100%{opacity:0;transform:translateY(-20px) translateX(var(--drift,20px))}
+}
+
+/* Contenu hero */
+.hero-content{
+  position:relative;z-index:2;padding:0 6%;
+  display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;
+  width:100%;
+}
+.hero-text{}
+.hero-label{
+  display:inline-flex;align-items:center;gap:0.7rem;
+  font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--or);margin-bottom:1.8rem;
+  animation:label-in 1s var(--ease) 0.3s both;
+}
+@keyframes label-in{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.hero-label::before{content:'';width:30px;height:1px;background:var(--or);display:block}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,5.5vw,4.5rem);
+  line-height:1.08;margin-bottom:1.6rem;
+  animation:title-in 1.2s var(--ease) 0.5s both;
+}
+@keyframes title-in{from{opacity:0;transform:translateY(40px) skewY(1deg)}to{opacity:1;transform:translateY(0) skewY(0)}}
+.hero-title em{color:var(--or);font-style:italic;display:block}
+.hero-title .arabic{
+  font-family:'Tajawal',sans-serif;font-size:0.45em;
+  color:rgba(255,255,255,0.3);display:block;letter-spacing:0.1em;margin-bottom:0.3rem;
+  direction:rtl;
+}
+
+.hero-sub{
+  color:rgba(255,255,255,0.5);font-weight:300;line-height:1.9;
+  max-width:420px;margin-bottom:2.5rem;font-size:0.95rem;
+  animation:fade-up 1s var(--ease) 0.8s both;
+}
+@keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-actions{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  animation:fade-up 1s var(--ease) 1s both;
+}
+.btn-gold{
+  background:var(--or);color:var(--charbon);border:none;
+  padding:1rem 2.2rem;font-family:'Lato',sans-serif;
+  font-size:0.8rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;
+  cursor:pointer;position:relative;overflow:hidden;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:background 0.3s,transform 0.3s var(--ease-back),box-shadow 0.4s;
+}
+.btn-gold::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+  transition:left 0.5s var(--ease-sharp);
+}
+.btn-gold:hover::before{left:100%}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(201,168,76,0.4)}
+.btn-ghost{
+  background:transparent;color:rgba(255,255,255,0.7);
+  border:1px solid rgba(255,255,255,0.2);
+  padding:1rem 2.2rem;font-family:'Lato',sans-serif;
+  font-size:0.8rem;letter-spacing:0.18em;text-transform:uppercase;
+  cursor:pointer;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:border-color 0.3s,color 0.3s,transform 0.3s var(--ease-back);
+}
+.btn-ghost:hover{border-color:var(--or);color:var(--or);transform:translateY(-3px)}
+
+/* Hero Visual */
+.hero-visual{
+  display:flex;justify-content:center;align-items:center;
+  position:relative;
+  animation:visual-in 1.4s var(--ease) 0.4s both;
+}
+@keyframes visual-in{from{opacity:0;transform:scale(0.85) rotate(-2deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+
+.caftan-frame{
+  width:min(300px,80%);aspect-ratio:2/3;
+  position:relative;
+  border:1px solid rgba(201,168,76,0.25);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  overflow:hidden;
+  background:linear-gradient(160deg,rgba(122,30,58,0.35) 0%,rgba(30,10,20,0.9) 100%);
+  transition:transform 0.6s var(--ease),box-shadow 0.6s;
+}
+.caftan-frame:hover{transform:translateY(-8px) rotateY(3deg);box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(201,168,76,0.4)}
+.caftan-frame::before,.caftan-frame::after{
+  content:'';position:absolute;border:1px solid rgba(201,168,76,0.15);
+  transition:inset 0.5s var(--ease),border-color 0.5s;
+}
+.caftan-frame::before{inset:10px}
+.caftan-frame::after{inset:18px;border-style:dashed}
+.caftan-frame:hover::before{inset:6px;border-color:rgba(201,168,76,0.4)}
+.caftan-frame:hover::after{inset:14px;border-color:rgba(201,168,76,0.25)}
+
+.caftan-emoji{font-size:5rem;filter:drop-shadow(0 0 20px rgba(201,168,76,0.35));transition:transform 0.5s var(--ease-back),filter 0.5s}
+.caftan-frame:hover .caftan-emoji{transform:scale(1.12);filter:drop-shadow(0 0 40px rgba(201,168,76,0.6))}
+.caftan-tag{
+  font-family:'Playfair Display',serif;color:var(--or);
+  font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;margin-top:1rem;
+}
+.caftan-badge{
+  position:absolute;top:1.5rem;right:-1px;
+  background:var(--or);color:var(--charbon);
+  font-size:0.6rem;font-weight:700;letter-spacing:0.12em;padding:0.3rem 0.8rem 0.3rem 0.6rem;
+  text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,100% 100%,0% 100%);
+}
+
+/* Coins futuristes */
+.corner{position:absolute;width:16px;height:16px;border-color:var(--or);border-style:solid;opacity:0.7}
+.corner-tl{top:4px;left:4px;border-width:1px 0 0 1px}
+.corner-tr{top:4px;right:4px;border-width:1px 1px 0 0}
+.corner-bl{bottom:4px;left:4px;border-width:0 0 1px 1px}
+.corner-br{bottom:4px;right:4px;border-width:0 1px 1px 0}
+
+/* Scroll indicator */
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  color:rgba(255,255,255,0.3);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;
+  animation:fade-in-scroll 2s ease 2s both;
+  cursor:pointer;
+}
+@keyframes fade-in-scroll{from{opacity:0}to{opacity:1}}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(201,168,76,0.8),transparent);animation:scroll-drop 1.8s ease infinite}
+@keyframes scroll-drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ═══════════════════════════ REVEAL SYSTEM ═══════════════════════════ */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 0.9s var(--ease),transform 0.9s var(--ease)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-36px);transition:opacity 0.9s var(--ease),transform 0.9s var(--ease)}
+.reveal-left.vis{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(0.92);transition:opacity 0.9s var(--ease),transform 0.9s var(--ease)}
+.reveal-scale.vis{opacity:1;transform:scale(1)}
+.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}.d4{transition-delay:0.4s}.d5{transition-delay:0.5s}
+
+/* ═══════════════════════════ ACCUEIL BIENVENUE ═══════════════════════════ */
+.bienvenue{
+  padding:5rem 6%;
+  background:var(--charbon2);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.bienvenue::before{
+  content:'بسم الله الرحمن الرحيم';
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Tajawal',sans-serif;font-size:8rem;
+  color:rgba(201,168,76,0.04);white-space:nowrap;letter-spacing:0.1em;
+  pointer-events:none;direction:rtl;
+}
+.bienvenue-badge{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  border:1px solid rgba(201,168,76,0.3);
+  padding:0.4rem 1rem;font-size:0.68rem;letter-spacing:0.25em;
+  text-transform:uppercase;color:var(--or);margin-bottom:1.5rem;
+}
+.bienvenue h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,3.5vw,3rem);margin-bottom:1.2rem;
+}
+.bienvenue-text{
+  max-width:680px;margin:0 auto 2.5rem;
+  color:rgba(255,255,255,0.55);line-height:1.95;font-weight:300;font-size:1rem;
+}
+.bienvenue-features{
+  display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-top:2rem;
+}
+.bv-feat{
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.45);
+  transition:color 0.3s;cursor:default;
+}
+.bv-feat:hover{color:var(--or)}
+.bv-icon{font-size:1.5rem;transition:transform 0.4s var(--ease-back)}
+.bv-feat:hover .bv-icon{transform:scale(1.25) rotate(-5deg)}
+
+/* ═══════════════════════════ COLLECTIONS ═══════════════════════════ */
+.collections{padding:5rem 6%;background:var(--charbon)}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem}
+.eyebrow{font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--or);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.6rem}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--or)}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.15}
+.voir-tout{
+  font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.4);text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;
+  transition:color 0.3s,border-color 0.3s,letter-spacing 0.4s var(--ease);
+}
+.voir-tout:hover{color:var(--or);border-color:var(--or);letter-spacing:0.24em}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+
+.card{cursor:pointer;position:relative}
+.card-img{
+  aspect-ratio:3/4;position:relative;overflow:hidden;margin-bottom:1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.card-img-fill{
+  position:absolute;inset:0;
+  transition:transform 0.8s var(--ease),filter 0.5s;
+}
+.card:hover .card-img-fill{transform:scale(1.08)}
+.card-emoji{font-size:4.5rem;position:relative;z-index:1;transition:transform 0.5s var(--ease-back)}
+.card:hover .card-emoji{transform:scale(1.1) translateY(-4px)}
+
+/* Overlay futuriste */
+.card-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.85) 100%);
+  opacity:0;transition:opacity 0.5s var(--ease);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:1.2rem;z-index:2;
+}
+.card:hover .card-overlay{opacity:1}
+.card-overlay-btn{
+  background:var(--or);color:var(--charbon);border:none;
+  width:100%;padding:0.75rem;font-family:'Lato',sans-serif;
+  font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;
+  cursor:pointer;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transform:translateY(10px);opacity:0;
+  transition:transform 0.4s var(--ease),opacity 0.4s;
+}
+.card:hover .card-overlay-btn{transform:translateY(0);opacity:1;transition-delay:0.08s}
+.card-overlay-btn:hover{background:var(--or2)}
+
+/* Scan line sur hover */
+.card-img::after{
+  content:'';position:absolute;top:-100%;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--or),transparent);
+  transition:top 0s;z-index:3;opacity:0;
+}
+.card:hover .card-img::after{top:100%;transition:top 0.6s linear,opacity 0.1s;opacity:0.6}
+
+.card-badge{
+  position:absolute;top:1rem;left:0;z-index:4;
+  background:var(--bordeaux);color:rgba(255,255,255,0.9);
+  font-size:0.6rem;font-weight:700;letter-spacing:0.12em;
+  padding:0.28rem 0.8rem;text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,0 100%);
+  transform:translateX(-8px);opacity:0;
+  transition:transform 0.5s var(--ease),opacity 0.5s;
+}
+.card.vis .card-badge{transform:translateX(0);opacity:1}
+
+.card-name{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:0.4rem;transition:color 0.3s}
+.card:hover .card-name{color:var(--or)}
+.card-price{font-weight:700;color:var(--or);font-size:0.95rem}
+.card-old{color:var(--gris);text-decoration:line-through;font-size:0.82rem;margin-left:0.5rem;font-weight:300}
+
+/* ═══════════════════════════ SUR MESURE ═══════════════════════════ */
+.sur-mesure{
+  padding:5rem 6%;background:var(--charbon2);
+  position:relative;overflow:hidden;
+}
+.sur-mesure::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(122,30,58,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.sm-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.sm-info{}
+.sm-steps{margin-top:2.5rem;display:flex;flex-direction:column;gap:0}
+
+.sm-step{
+  display:flex;gap:1.5rem;padding:1.5rem;
+  border-left:1px solid rgba(201,168,76,0.1);
+  transition:border-color 0.4s,background 0.4s,transform 0.4s var(--ease);
+  position:relative;
+}
+.sm-step::before{
+  content:'';position:absolute;left:-1px;top:0;bottom:0;width:1px;
+  background:var(--or);transform:scaleY(0);transform-origin:top;
+  transition:transform 0.5s var(--ease);
+}
+.sm-step:hover::before{transform:scaleY(1)}
+.sm-step:hover{background:rgba(201,168,76,0.04);transform:translateX(4px)}
+
+.sm-num{
+  font-family:'Playfair Display',serif;font-size:2.5rem;
+  color:rgba(201,168,76,0.2);line-height:1;min-width:3rem;
+  transition:color 0.4s;
+}
+.sm-step:hover .sm-num{color:rgba(201,168,76,0.6)}
+.sm-step h4{font-size:0.82rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.4rem;color:var(--blanc)}
+.sm-step p{color:rgba(255,255,255,0.45);font-size:0.83rem;line-height:1.7;font-weight:300}
+
+/* Formulaire sur mesure */
+.sm-form-wrap{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(201,168,76,0.15);
+  padding:2.5rem;position:relative;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+}
+.sm-form-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--or),transparent);
+  opacity:0.6;
+}
+.sm-form-title{
+  font-family:'Playfair Display',serif;font-size:1.4rem;
+  margin-bottom:0.5rem;color:var(--blanc);
+}
+.sm-form-sub{color:rgba(255,255,255,0.4);font-size:0.82rem;margin-bottom:2rem;font-weight:300}
+
+.form-group{margin-bottom:1.3rem}
+.form-label{display:block;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--or);margin-bottom:0.5rem;opacity:0.8}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(201,168,76,0.15);border-bottom-color:rgba(201,168,76,0.4);
+  color:var(--blanc);padding:0.8rem 1rem;font-family:'Lato',sans-serif;font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;
+  appearance:none;
+}
+.form-select{cursor:pointer}
+.form-select option{background:var(--charbon2)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:var(--or);
+  background:rgba(201,168,76,0.05);
+  box-shadow:0 0 0 3px rgba(201,168,76,0.08),0 0 20px rgba(201,168,76,0.06);
+}
+.form-textarea{resize:vertical;min-height:100px;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-submit{
+  width:100%;background:var(--bordeaux);color:var(--blanc);border:none;
+  padding:1.1rem;font-family:'Lato',sans-serif;font-size:0.82rem;
+  letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+  cursor:pointer;margin-top:0.5rem;
+  clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+  position:relative;overflow:hidden;
+  transition:background 0.3s,transform 0.3s var(--ease-back),box-shadow 0.4s;
+}
+.form-submit::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+  transition:left 0.5s var(--ease-sharp);
+}
+.form-submit:hover::before{left:100%}
+.form-submit:hover{background:var(--bordeaux2);transform:translateY(-2px);box-shadow:0 12px 35px rgba(122,30,58,0.4)}
+
+/* ═══════════════════════════ SAVOIR-FAIRE ═══════════════════════════ */
+.savoir{padding:5rem 6%;background:var(--charbon);text-align:center}
+.savoir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem}
+.savoir-card{
+  padding:2.5rem 2rem;border:1px solid rgba(201,168,76,0.1);
+  position:relative;overflow:hidden;text-align:left;
+  transition:border-color 0.5s,transform 0.5s var(--ease),background 0.5s;
+}
+.savoir-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--or),transparent);
+  transform:scaleX(0);transition:transform 0.5s var(--ease);
+}
+.savoir-card:hover{border-color:rgba(201,168,76,0.3);transform:translateY(-6px);background:rgba(201,168,76,0.03)}
+.savoir-card:hover::after{transform:scaleX(1)}
+.savoir-icon{font-size:2.2rem;margin-bottom:1.2rem;display:block;transition:transform 0.4s var(--ease-back)}
+.savoir-card:hover .savoir-icon{transform:scale(1.2) rotate(-5deg)}
+.savoir-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:0.7rem;color:var(--blanc)}
+.savoir-card p{color:rgba(255,255,255,0.45);font-size:0.83rem;line-height:1.75;font-weight:300}
+
+/* ═══════════════════════════ TEMOIGNAGES ═══════════════════════════ */
+.temoignages{padding:5rem 6%;background:var(--charbon2)}
+.temoignages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.temoignage{
+  padding:2rem;border:1px solid rgba(255,255,255,0.06);
+  border-top:2px solid transparent;
+  transition:border-top-color 0.5s,transform 0.5s var(--ease),background 0.5s,box-shadow 0.5s;
+  position:relative;overflow:hidden;
+}
+.temoignage::before{
+  content:'❝';position:absolute;top:1rem;right:1.5rem;
+  font-size:3rem;color:rgba(201,168,76,0.08);font-family:Georgia,serif;line-height:1;
+}
+.temoignage:hover{border-top-color:var(--or);transform:translateY(-5px);background:rgba(255,255,255,0.02);box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+.etoiles{color:var(--or);letter-spacing:0.12em;margin-bottom:1rem;font-size:0.9rem}
+.temoignage p{font-style:italic;color:rgba(255,255,255,0.5);line-height:1.75;margin-bottom:1.5rem;font-size:0.88rem;font-weight:300}
+.auteur{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.7);font-weight:700}
+.auteur span{color:var(--or);font-weight:300}
+
+/* ═══════════════════════════ SERVICES ═══════════════════════════ */
+.services{padding:4rem 6%;background:var(--charbon)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,0.1);margin-top:3rem;border:1px solid rgba(201,168,76,0.1)}
+.service-item{
+  background:var(--charbon);padding:2.5rem 2rem;text-align:center;
+  transition:background 0.4s;
+}
+.service-item:hover{background:var(--charbon2)}
+.service-icon{font-size:2rem;margin-bottom:1rem;display:block;transition:transform 0.4s var(--ease-back)}
+.service-item:hover .service-icon{transform:scale(1.2)}
+.service-item h4{font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.5rem;color:rgba(255,255,255,0.8)}
+.service-item p{color:rgba(255,255,255,0.4);font-size:0.8rem;line-height:1.6;font-weight:300}
+.service-divider{width:30px;height:1px;background:var(--or);margin:0.8rem auto;transition:width 0.4s var(--ease)}
+.service-item:hover .service-divider{width:50px}
+
+/* ═══════════════════════════ NEWSLETTER ═══════════════════════════ */
+.newsletter{
+  padding:4.5rem 6%;background:var(--bordeaux);text-align:center;position:relative;overflow:hidden;
+}
+.newsletter::before{
+  content:'';position:absolute;inset:0;opacity:0.04;
+  background-image:repeating-linear-gradient(45deg,var(--or) 0,var(--or) 1px,transparent 0,transparent 50%),repeating-linear-gradient(-45deg,var(--or) 0,var(--or) 1px,transparent 0,transparent 50%);
+  background-size:30px 30px;
+}
+.newsletter h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.7rem;position:relative}
+.newsletter p{color:rgba(255,255,255,0.6);margin-bottom:2rem;font-weight:300;position:relative}
+.nl-form{display:flex;max-width:420px;margin:0 auto;position:relative}
+.nl-input{
+  flex:1;padding:0.9rem 1.2rem;border:none;border-bottom:1px solid rgba(201,168,76,0.5);
+  background:rgba(255,255,255,0.08);color:var(--blanc);font-family:'Lato',sans-serif;font-size:0.9rem;
+  outline:none;transition:background 0.3s,border-color 0.3s;
+}
+.nl-input:focus{background:rgba(255,255,255,0.14);border-bottom-color:var(--or)}
+.nl-input::placeholder{color:rgba(255,255,255,0.35)}
+.nl-btn{
+  padding:0.9rem 1.5rem;background:var(--or);color:var(--charbon);
+  border:none;font-family:'Lato',sans-serif;font-weight:700;
+  font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
+  cursor:pointer;white-space:nowrap;
+  transition:background 0.3s,transform 0.25s var(--ease-back);
+}
+.nl-btn:hover{background:var(--or2);transform:scale(1.04)}
+
+/* ═══════════════════════════ FOOTER ═══════════════════════════ */
+footer{
+  background:#080808;color:rgba(255,255,255,0.4);
+  padding:4rem 6%;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;
+  border-top:1px solid rgba(201,168,76,0.12);
+}
+.foot-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--blanc);margin-bottom:0.8rem}
+.foot-logo span{color:var(--or)}
+.foot-logo sub{font-size:0.5rem;letter-spacing:0.3em;color:rgba(255,255,255,0.3);vertical-align:bottom;font-family:'Lato',sans-serif;margin-left:6px;text-transform:uppercase}
+.foot-desc{font-size:0.82rem;line-height:1.8;max-width:220px;font-weight:300}
+.foot-arabic{font-family:'Tajawal',sans-serif;direction:rtl;color:rgba(201,168,76,0.4);font-size:0.9rem;margin-top:0.5rem}
+footer h5{color:rgba(255,255,255,0.7);font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;margin-bottom:1.3rem}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:0.65rem}
+footer ul a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.82rem;transition:color 0.3s,padding-left 0.3s var(--ease);display:block}
+footer ul a:hover{color:var(--or);padding-left:6px}
+.foot-bottom{background:#050505;color:rgba(255,255,255,0.25);text-align:center;padding:1.2rem 6%;font-size:0.72rem;letter-spacing:0.08em;border-top:1px solid rgba(255,255,255,0.05)}
+
+/* ═══════════════════════════ RESPONSIVE ═══════════════════════════ */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .hero-content{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .sm-grid{grid-template-columns:1fr}
+  .savoir-grid,.temoignages-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr 1fr}
+  section{padding:3.5rem 5%}
+  .bienvenue-features{gap:1.5rem}
+  .form-row{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0.01ms!important;animation-duration:0.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="logo">Fano <span>Kaftan</span><sub>Salé</sub></div>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#sur-mesure">Sur Mesure</a></li>
+    <li><a href="#savoir">Savoir-faire</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-mesure" onclick="document.getElementById('sur-mesure').scrollIntoView({behavior:'smooth'})">Commander sur mesure</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="zellige-canvas">
+    <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="zp" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+          <polygon points="40,0 80,20 80,60 40,80 0,60 0,20" fill="none" stroke="#C9A84C" stroke-width="0.5"/>
+          <polygon points="40,15 65,27 65,53 40,65 15,53 15,27" fill="none" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="40" y1="0" x2="40" y2="15" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="40" y1="65" x2="40" y2="80" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="0" y1="20" x2="15" y2="27" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="65" y1="27" x2="80" y2="20" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="0" y1="60" x2="15" y2="53" stroke="#C9A84C" stroke-width="0.3"/>
+          <line x1="65" y1="53" x2="80" y2="60" stroke="#C9A84C" stroke-width="0.3"/>
+          <circle cx="40" cy="40" r="4" fill="none" stroke="#C9A84C" stroke-width="0.4"/>
+        </pattern>
+        <animateTransform attributeName="patternTransform" type="translate" from="0,0" to="80,80" dur="25s" repeatCount="indefinite" xlink:href="#zp"/>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#zp)"/>
+    </svg>
+  </div>
+  <div class="scan-lines"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-label">Maison de Caftans · Salé, Maroc</div>
+      <h1 class="hero-title">
+        <span class="arabic">فانو كفطان</span>
+        L'Art du<br>
+        <em>Caftan Marocain</em>
+      </h1>
+      <p class="hero-sub">
+        Bienvenue dans notre maison. Chaque pièce est créée avec amour et passion par nos artisanes de Salé — ville millénaire au cœur du patrimoine marocain.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-gold" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Découvrir la collection</button>
+        <button class="btn-ghost" onclick="document.getElementById('sur-mesure').scrollIntoView({behavior:'smooth'})">Caftan sur mesure</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="caftan-frame">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        <div class="caftan-badge">Collection Royale</div>
+        <div class="caftan-emoji">🥻</div>
+        <div class="caftan-tag">Artisanat de Salé</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" onclick="document.getElementById('bienvenue').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+</section>
+
+<!-- ══ BIENVENUE ══ -->
+<section class="bienvenue" id="bienvenue">
+  <div class="bienvenue-badge reveal">✦ Marhaba · مرحبا ✦</div>
+  <h2 class="reveal d1">Soyez les bienvenus<br>dans notre Maison</h2>
+  <p class="bienvenue-text reveal d2">
+    Chez Fano Kaftan à Salé, nous vous accueillons comme des hôtes précieux. Notre passion pour le caftan marocain est héritée de nos mères et grands-mères. Chaque cliente est unique — c'est pourquoi nous offrons un service personnalisé, chaleureux et attentif, du premier contact jusqu'à la livraison de votre rêve.
+  </p>
+  <div class="bienvenue-features">
+    <div class="bv-feat reveal d1"><span class="bv-icon">🤝</span>Accueil personnalisé</div>
+    <div class="bv-feat reveal d2"><span class="bv-icon">🪡</span>Artisanat authentique</div>
+    <div class="bv-feat reveal d3"><span class="bv-icon">📍</span>Basées à Salé</div>
+    <div class="bv-feat reveal d4"><span class="bv-icon">✨</span>Sur mesure disponible</div>
+    <div class="bv-feat reveal d5"><span class="bv-icon">💛</span>Fait avec amour</div>
+  </div>
+</section>
+
+<!-- ══ COLLECTIONS ══ -->
+<section class="collections" id="collections">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow reveal">Notre sélection</div>
+      <h2 class="section-title reveal d1">Collections du Moment</h2>
+    </div>
+    <a href="#" class="voir-tout reveal d2">Voir tout →</a>
+  </div>
+  <div class="grid">
+    <div class="card reveal d1">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#5C0E28 0%,#9B2548 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-badge">Bestseller</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Sultana Rouge</div>
+      <div><span class="card-price">2 850 MAD</span></div>
+    </div>
+    <div class="card reveal d2">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#0A2545 0%,#1A4A8A 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-badge" style="background:var(--or);color:var(--charbon)">Nouveau</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Bahr Al-Nil</div>
+      <div><span class="card-price">3 200 MAD</span></div>
+    </div>
+    <div class="card reveal d3">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#1B4A2A 0%,#2E8A45 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Jardin d'Andalous</div>
+      <div><span class="card-price">1 950 MAD</span><span class="card-old">2 400 MAD</span></div>
+    </div>
+    <div class="card reveal d1">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#2E1845 0%,#6030A0 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-badge" style="background:rgba(201,168,76,0.15);color:var(--or);border:1px solid rgba(201,168,76,0.3)">Édition limitée</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Nuit d'Ifrane</div>
+      <div><span class="card-price">4 100 MAD</span></div>
+    </div>
+    <div class="card reveal d2">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#4A2808 0%,#B06520 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Ambre du Sahara</div>
+      <div><span class="card-price">2 200 MAD</span></div>
+    </div>
+    <div class="card reveal d3">
+      <div class="card-img">
+        <div class="card-img-fill" style="background:linear-gradient(135deg,#0A3A3A 0%,#1A8888 100%)"></div>
+        <div class="card-emoji">🥻</div>
+        <div class="card-overlay"><button class="card-overlay-btn">Ajouter au panier</button></div>
+      </div>
+      <div class="card-name">Caftan Émeraude de Tanger</div>
+      <div><span class="card-price">2 650 MAD</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SUR MESURE ══ -->
+<section class="sur-mesure" id="sur-mesure">
+  <div class="sm-grid">
+    <div class="sm-info">
+      <div class="eyebrow reveal">Service exclusif</div>
+      <h2 class="section-title reveal d1">Votre caftan,<br>créé sur mesure<br><em style="font-family:'Playfair Display',serif;color:var(--or);font-style:italic">rien que pour vous</em></h2>
+      <p style="color:rgba(255,255,255,0.45);margin:1.2rem 0 2rem;line-height:1.9;font-weight:300;font-size:0.9rem" class="reveal d2">
+        Vous rêvez d'un caftan unique ? Nos artisanes de Salé réalisent votre vision avec précision et passion — du choix du tissu jusqu'à la dernière broderie.
+      </p>
+      <div class="sm-steps">
+        <div class="sm-step reveal d1">
+          <div class="sm-num">01</div>
+          <div><h4>Consultation</h4><p>Décrivez vos envies, couleurs et occasion. Nous vous conseillons avec chaleur et expertise.</p></div>
+        </div>
+        <div class="sm-step reveal d2">
+          <div class="sm-num">02</div>
+          <div><h4>Choix des matières</h4><p>Soies, velours, crêpes — nous sélectionnons ensemble les plus belles étoffes disponibles à Salé.</p></div>
+        </div>
+        <div class="sm-step reveal d3">
+          <div class="sm-num">03</div>
+          <div><h4>Création & broderie</h4><p>Nos artisanes travaillent avec amour. Motifs, sfifa, mkak — chaque détail est pensé pour vous.</p></div>
+        </div>
+        <div class="sm-step reveal d4">
+          <div class="sm-num">04</div>
+          <div><h4>Livraison à Salé</h4><p>Récupérez votre création en boutique ou recevez-la partout au Maroc sous 2 à 4 semaines.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal-scale d2">
+      <div class="sm-form-wrap">
+        <div class="sm-form-title">Demande sur mesure</div>
+        <div class="sm-form-sub">Nous vous répondons sous 24h · Devis gratuit</div>
+        <div class="form-group">
+          <label class="form-label">Votre prénom</label>
+          <input type="text" class="form-input" placeholder="Fatima, Khadija…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Téléphone (WhatsApp)</label>
+          <input type="tel" class="form-input" placeholder="+212 6XX XXX XXX">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Occasion</label>
+            <select class="form-select">
+              <option value="">Choisir…</option>
+              <option>Mariage</option>
+              <option>Fiançailles</option>
+              <option>Fête / Henna</option>
+              <option>Soirée de gala</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Budget estimé</label>
+            <select class="form-select">
+              <option value="">Choisir…</option>
+              <option>1 000 – 2 000 MAD</option>
+              <option>2 000 – 4 000 MAD</option>
+              <option>4 000 – 7 000 MAD</option>
+              <option>+7 000 MAD</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Couleur(s) souhaitée(s)</label>
+          <input type="text" class="form-input" placeholder="Ex : bordeaux et or, bleu nuit…">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vos envies & inspirations</label>
+          <textarea class="form-textarea" placeholder="Décrivez le style, les broderies, les détails qui vous font rêver…"></textarea>
+        </div>
+        <button class="form-submit">✦ Envoyer ma demande ✦</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SAVOIR-FAIRE ══ -->
+<section class="savoir" id="savoir">
+  <div class="eyebrow reveal" style="justify-content:center">Notre héritage</div>
+  <h2 class="section-title reveal d1">Artisanat de Salé</h2>
+  <div class="savoir-grid">
+    <div class="savoir-card reveal d1">
+      <span class="savoir-icon">🪡</span>
+      <h3>Broderie Traditionnelle</h3>
+      <p>La <em>sfifa</em>, le <em>mkak</em> et les fils d'or tissés à la main par nos artisanes héritières d'un savoir séculaire.</p>
+    </div>
+    <div class="savoir-card reveal d2">
+      <span class="savoir-icon">🧵</span>
+      <h3>Tissus d'Excellence</h3>
+      <p>Soies de Fès, velours précieux, crêpe de qualité — nous sélectionnons uniquement les meilleures étoffes du Maroc.</p>
+    </div>
+    <div class="savoir-card reveal d3">
+      <span class="savoir-icon">💎</span>
+      <h3>Finition Parfaite</h3>
+      <p>Chaque caftan passe par nos mains expertes pour garantir une finition irréprochable, digne de la tradition royale marocaine.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TEMOIGNAGES ══ -->
+<section class="temoignages" id="temoignages">
+  <div class="eyebrow reveal" style="justify-content:center">Nos clientes</div>
+  <h2 class="section-title reveal d1" style="text-align:center">Elles nous font confiance</h2>
+  <div class="temoignages-grid">
+    <div class="temoignage reveal d1">
+      <div class="etoiles">★★★★★</div>
+      <p>« Mon caftan de mariage était d'une beauté à couper le souffle. Les artisanes de Fano Kaftan ont réalisé mon rêve avec une patience et un talent extraordinaires. »</p>
+      <div class="auteur">Fatima Z. <span>— Salé</span></div>
+    </div>
+    <div class="temoignage reveal d2">
+      <div class="etoiles">★★★★★</div>
+      <p>« Le service sur mesure est exceptionnel. Elles ont écouté chacune de mes envies et le résultat était encore plus beau que ce que j'imaginais. Merci du fond du cœur. »</p>
+      <div class="auteur">Nadia B. <span>— Rabat</span></div>
+    </div>
+    <div class="temoignage reveal d3">
+      <div class="etoiles">★★★★★</div>
+      <p>« Livraison rapide, emballage soigné et qualité incomparable. C'est ma troisième commande et je reviens toujours avec le sourire. Fano Kaftan, c'est une vraie maison de confiance. »</p>
+      <div class="auteur">Salma H. <span>— Casablanca</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section class="services">
+  <div class="eyebrow reveal" style="justify-content:center">Nos engagements</div>
+  <h2 class="section-title reveal d1" style="text-align:center">Service d'exception</h2>
+  <div class="services-grid">
+    <div class="service-item reveal d1">
+      <span class="service-icon">🚚</span>
+      <div class="service-divider"></div>
+      <h4>Livraison Maroc</h4>
+      <p>Gratuite dès 1 500 MAD. Partout au Maroc en 2–4 jours. Remise en main propre disponible à Salé.</p>
+    </div>
+    <div class="service-item reveal d2">
+      <span class="service-icon">📐</span>
+      <div class="service-divider"></div>
+      <h4>Sur Mesure</h4>
+      <p>Ajustement à vos mensurations. Retouches incluses. Votre silhouette, sublimée.</p>
+    </div>
+    <div class="service-item reveal d3">
+      <span class="service-icon">↩️</span>
+      <div class="service-divider"></div>
+      <h4>Retours Faciles</h4>
+      <p>30 jours pour changer d'avis. Échanges et remboursements sans question.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEWSLETTER ══ -->
+<section class="newsletter" id="contact">
+  <h2 class="reveal">Rejoignez la famille Fano Kaftan</h2>
+  <p class="reveal d1">Nouvelles collections, inspirations et offres exclusives — directement chez vous.</p>
+  <div class="nl-form reveal d2">
+    <input type="email" class="nl-input" placeholder="Votre adresse e-mail">
+    <button class="nl-btn">S'inscrire</button>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div>
+    <div class="foot-logo">Fano <span>Kaftan</span><sub>Salé</sub></div>
+    <p class="foot-desc">Maison de caftans marocains à Salé. L'artisanat authentique au service de votre élégance.</p>
+    <div class="foot-arabic">فانو كفطان · سلا</div>
+  </div>
+  <div>
+    <h5>Collections</h5>
+    <ul>
+      <li><a href="#">Caftans de mariage</a></li>
+      <li><a href="#">Collection Royale</a></li>
+      <li><a href="#">Prêt-à-porter</a></li>
+      <li><a href="#">Sur mesure</a></li>
+    </ul>
+  </div>
+  <div>
+    <h5>Service</h5>
+    <ul>
+      <li><a href="#">Mon compte</a></li>
+      <li><a href="#">Suivi commande</a></li>
+      <li><a href="#">Retours & échanges</a></li>
+      <li><a href="#">FAQ</a></li>
+    </ul>
+  </div>
+  <div>
+    <h5>Nous trouver</h5>
+    <ul>
+      <li><a href="#">📍 Salé, Maroc</a></li>
+      <li><a href="#">📞 +212 5XX XXX XXX</a></li>
+      <li><a href="#">💬 WhatsApp</a></li>
+      <li><a href="#">📸 Instagram</a></li>
+      <li><a href="#">✉️ contact@fanokaftan.ma</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="foot-bottom">© Fano Kaftan · Salé · Artisanat Marocain Authentique</div>
+
+<script>
+/* Cursor */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function lag(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lag)})();
+document.querySelectorAll('button,a,.card,.caftan-frame').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='52px';ring.style.height='52px';ring.style.borderColor='rgba(201,168,76,0.8)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(201,168,76,0.5)'});
+});
+
+/* Nav scroll */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>80),{passive:true});
+
+/* Particles */
+const pc=document.getElementById('particles');
+for(let i=0;i<18;i++){
+  const p=document.createElement('div');p.className='particle';
+  p.style.cssText=`left:${Math.random()*100}%;--dur:${7+Math.random()*10}s;--delay:${Math.random()*10}s;--drift:${(Math.random()-0.5)*80}px`;
+  pc.appendChild(p);
+}
+
+/* Scroll reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}});
+},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-scale,.card').forEach(el=>obs.observe(el));
+
+/* Form submit */
+document.querySelector('.form-submit').addEventListener('click',function(){
+  this.textContent='✓ Demande envoyée — nous vous contactons sous 24h';
+  this.style.background='#1A6B3A';
+  setTimeout(()=>{this.textContent='✦ Envoyer ma demande ✦';this.style.background=''},5000);
+});
+</script>
+</body>
+</html>
